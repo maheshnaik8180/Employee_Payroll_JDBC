@@ -62,5 +62,16 @@ public class Employee_Payroll_Test {
         double tax=90000;
         double net_pay=4000;
         int result=employee_Payroll.InsertDataInPayroll_Details(payroll_id,basic_pay,deduction,tax_pay,tax,net_pay);
-        Assert.assertEquals(1,result);    }
+        Assert.assertEquals(1,result);   
+    }
+
+    @Test
+    public void adding_new_employee_details_in_employee_table() throws SQLException {
+        String name = "Nandini";
+        String date = "2021-03-03";
+        double salary = 900000;
+        String gender = "F";
+        int payroll_id = 5;
+
+    }
 }
