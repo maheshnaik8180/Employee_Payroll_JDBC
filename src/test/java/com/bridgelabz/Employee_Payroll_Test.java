@@ -27,4 +27,11 @@ public class Employee_Payroll_Test {
         List<EmployeePayrollData>employeePayrollDataList=employee_Payroll.employeeDetailsfromDate();
         Assert.assertEquals(2,employeePayrollDataList.size());
     }
+
+    @Test
+    public void given_sum_avg_min_max_count() {
+        Employee_payroll employee_Payroll = new Employee_payroll();
+        List<String> list=employee_Payroll.Database_operation();
+        Assert.assertEquals(12,list.size());
+    }
 }

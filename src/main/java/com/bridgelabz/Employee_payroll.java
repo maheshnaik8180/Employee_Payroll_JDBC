@@ -104,5 +104,29 @@ public class Employee_payroll {
         return employeePayrollDataArrayList;
     }
 
+    public List<String> Database_operation(){
+        List<String> list=new ArrayList();
+        try {
+            Connection connection=this.getConnection();
+            PreparedStatement preparedStatement=connection.prepareStatement("select gender,sum(salary), Avg(salary),min(salary),max(salary),count(salary) from employee_payroll group by gender; ");
+            ResultSet resultSet=preparedStatement.executeQuery();
+            while (resultSet.next()){
+                int num=1;
+                System.out.println("Gender: "+resultSet.getString(1));
+                System.out.println("Salary: "+resultSet.getString(2));
+                for (int i=0;i<6;i++){
+                    if(num<8) {
+                        list.add(i, resultSet.getString(num));
+                        num++;
+                    }
+                }
+                System.out.println(list);
+            }
+        }catch (SQLException throwables){
+            throwables.printStackTrace();
+        }
+        return list;
+    }
+
 
 }
