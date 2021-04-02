@@ -17,8 +17,7 @@ public class Employee_Payroll_Test {
     @Test
     public void givenNewSalaryForEmployee_whenUpdate_shouldSyncWithDB() {
         Employee_payroll employee_Payroll = new Employee_payroll();
-        employee_Payroll.updateData();
-        List<EmployeePayrollData> employeePayrollDataList=employee_Payroll.readData();
-        Assert.assertEquals(3,employeePayrollDataList.size());
+        long result=employee_Payroll.updateData();
+        Assert.assertEquals(1,result);
     }
 }
