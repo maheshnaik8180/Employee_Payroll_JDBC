@@ -66,12 +66,21 @@ public class Employee_Payroll_Test {
     }
 
     @Test
-    public void adding_new_employee_details_in_employee_table() throws SQLException {
+    public void add_employee_details_in_employee_table() throws SQLException {
         String name = "Nandini";
         String date = "2021-03-03";
         double salary = 900000;
         String gender = "F";
         int payroll_id = 5;
+
+    }
+
+    @Test
+    public void Remove_detail_from_employee_table_data() {
+        String name="Nandini";
+        Employee_payroll employee_Payroll = new Employee_payroll();
+        List<EmployeePayrollData> employeePayrollDataList= employee_Payroll.readData();
+        Assert.assertEquals(5,employeePayrollDataList.size());
 
     }
 }
