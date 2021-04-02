@@ -2,6 +2,8 @@ package com.bridgelabz;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public class Employee_Payroll_Test {
@@ -39,7 +41,7 @@ public class Employee_Payroll_Test {
     }
 
     @Test
-    public void insert_new_employee_in_employee_table(){
+    public void insert_new_employee_in_employee_table()throws SQLException {
         Employee_payroll employee_Payroll = new Employee_payroll();
         String name="Sam";
         String date="2021-07-07";
@@ -59,6 +61,6 @@ public class Employee_Payroll_Test {
         double tax_pay=20000;
         double tax=90000;
         double net_pay=4000;
-        employee_Payroll.InsertDataInPayroll_Details(payroll_id,basic_pay,deduction,tax_pay,tax,net_pay);
-    }
+        int result=employee_Payroll.InsertDataInPayroll_Details(payroll_id,basic_pay,deduction,tax_pay,tax,net_pay);
+        Assert.assertEquals(1,result);    }
 }

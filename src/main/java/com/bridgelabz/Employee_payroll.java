@@ -108,23 +108,35 @@ public class Employee_payroll {
         }
         return list;
     }
-    public void AddDataInTable(String name,String date,double salary,String gender){
+    public void AddDataInTable(String name,String date,double salary,String gender) throws SQLException {
         try{
             Connection connection=this.getConnection();
+            connection.setAutoCommit(false);
             PreparedStatement preparedStatement=connection.prepareStatement("insert into employee_payroll(name,start,salary,gender) values(?,?,?,?); ");
 
             preparedStatement.setString(1,name);
             preparedStatement.setDate(2, Date.valueOf(date));
             preparedStatement.setDouble(3,salary);
             preparedStatement.setString(4,gender);
-            int resultSet=preparedStatement.executeUpdate();
+            int result=preparedStatement.executeUpdate();
+            int j=3;
+            PreparedStatement preparedStatement1=connection.prepareStatement("insert into payroll_detials(payroll_id,basicpay,deduction,taxpay,tax,netpay) values(?,?,?,?,?,?); ");
+            preparedStatement1.setInt(1,j);
+            preparedStatement1.setDouble(2, salary/10);
+            preparedStatement1.setDouble(3,salary/20);
+            preparedStatement1.setDouble(4,salary/10);
+            preparedStatement1.setDouble(5,salary/40);
+            preparedStatement1.setDouble(6,salary/50);
+            int resultSet1=preparedStatement1.executeUpdate();
+            j++;
+            connection.commit();
 
         }catch (SQLException throwables){
             throwables.printStackTrace();
         }
     }
 
-    public void InsertDataInPayroll_Details(int payroll_id,double basic_pay,double deduction,double tax_pay,double tax,double net_pay){
+    public int InsertDataInPayroll_Details(int payroll_id,double basic_pay,double deduction,double tax_pay,double tax,double net_pay){
         try{
             Connection connection=this.getConnection();
             PreparedStatement preparedStatement=connection.prepareStatement("insert into payroll_details(payroll_id,basic_pay,deduction,tax_pay,tax,net_pay) values(?,?,?,?,?,?); ");
@@ -136,9 +148,10 @@ public class Employee_payroll {
             preparedStatement.setDouble(5,tax);
             preparedStatement.setDouble(6,net_pay);
             int resultSet=preparedStatement.executeUpdate();
-
+            return resultSet;
         }catch (SQLException throwables){
             throwables.printStackTrace();
         }
+        return 0;
     }
 }
