@@ -6,18 +6,22 @@ import java.util.*;
 
 public class Employee_payroll {
 
-    private String employeePayrollData;{}
-
-
-
-    private Connection getConnection() throws SQLException {
-        String jdbcurl = "jdbc:mysql://localhost:3306/employee_payroll_jdbc?useSSL=false";
+    private String employeePayrollData;
+    private int ConnectionCounter=0;
+    private synchronized Connection getConnection() throws SQLException {        String jdbcurl = "jdbc:mysql://localhost:3306/employee_payroll_jdbc?useSSL=false";
         String username = "root";
         String password = "admin";
-        Connection connection;
-        System.out.println("Connecting to database: " + jdbcurl);
-        connection = DriverManager.getConnection(jdbcurl, username, password);
-        System.out.println("Connection successful: " + connection);
+        Connection connection=null;
+        try {
+            System.out.println("Connecting to database: " + jdbcurl);
+            System.out.println("Processing Thread "+Thread.currentThread().getName()+"Connecting to database with id "+ConnectionCounter);
+            connection = DriverManager.getConnection(jdbcurl, username, password);
+            System.out.println("Processing Thread "+Thread.currentThread().getName()+" id "+ConnectionCounter+ " Connection was sucessfull!!! " +connection);
+            System.out.println("Connection successfull: " + connection);
+            return connection;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return connection;
     }
 
@@ -214,10 +218,10 @@ public class Employee_payroll {
             connection.rollback();
         }
     }
-    public void insertDataUsingThreads(List<EmployeePayrollData> employeePayrollData) throws SQLException {
-        Map<Integer, Boolean> employee = new HashMap<>();
-        employeePayrollData.forEach(employeePayrollData1 -> {
-            Runnable task = () -> {
+    public void insertDataUsingThreads(List<EmployeePayrollData> employeePayrollData) {
+             Map<Integer, Boolean> employee = new HashMap<>();
+             employeePayrollData.forEach(employeePayrollData1 -> {
+             Runnable task = () -> {
                 employee.put(employeePayrollData.hashCode(),  false);
                 System.out.println("Employee being added : " + Thread.currentThread().getName());
                 try {
@@ -227,18 +231,18 @@ public class Employee_payroll {
                 }
                 employee.put(employeePayrollData.hashCode(), true);
                 System.out.println("Employee added : " + Thread.currentThread().getName());
-            };
-            Thread thread = new Thread(task, employeePayrollData1.name);
-            thread.start();
-        });
-        while (employee.containsValue(false)) {
-            try {
+             };
+             Thread thread = new Thread(task, employeePayrollData1.name);
+             thread.start();
+             });
+             while (employee.containsValue(false)) {
+                 try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-        System.out.println("" + this.employeePayrollData);
+            }
+             System.out.println("" + this.employeePayrollData);
     }
 
 }
