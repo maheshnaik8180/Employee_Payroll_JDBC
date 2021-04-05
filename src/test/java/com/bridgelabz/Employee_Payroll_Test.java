@@ -2,9 +2,11 @@ package com.bridgelabz;
 
 import org.junit.Assert;
 import org.junit.Test;
-
+import java.time.Duration;
+import java.time.Instant;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class Employee_Payroll_Test {
         String gender="M";
         employee_Payroll.AddDataInTable(name,date,salary,gender);
         List<EmployeePayrollData> employeePayrollDataList=employee_Payroll.readData();
-        Assert.assertEquals(5,employeePayrollDataList.size());
+        Assert.assertEquals(3,employeePayrollDataList.size());
     }
 
     @Test
@@ -69,11 +71,14 @@ public class Employee_Payroll_Test {
 
     @Test
     public void add_employee_details_in_employee_table() throws SQLException {
+        Employee_payroll employee_Payroll = new Employee_payroll();
+        List<EmployeePayrollData> employeePayrollDataList= employee_Payroll.readData();
         String name = "Nandini";
         String date = "2021-03-03";
         double salary = 900000;
         String gender = "F";
-        int payroll_id = 5;
+        employee_Payroll.RecordsinsertInDataBase(name,date,salary,gender);
+        Assert.assertEquals(4,employeePayrollDataList.size());
 
     }
 
@@ -81,19 +86,41 @@ public class Employee_Payroll_Test {
     public void Remove_detail_from_employee_table_data() {
         String name="Nandini";
         Employee_payroll employee_Payroll = new Employee_payroll();
+        try {
+            employee_Payroll.delete_Employee_From_Employee_Payroll_Table(name);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         List<EmployeePayrollData> employeePayrollDataList= employee_Payroll.readData();
-        Assert.assertEquals(5,employeePayrollDataList.size());
+        Assert.assertEquals(4,employeePayrollDataList.size());
 
     }
 
     @Test
-    public void insert_multiple_values_into_a_table_at_a_single_time() throws SQLException {
+    public void Add_Multiple_employee_In_Table_One_Time() throws SQLException {
         Employee_payroll employee_Payroll = new Employee_payroll();
         List<EmployeePayrollData> list=new ArrayList<>();
-        list.add(new EmployeePayrollData(0,"sandhya", Date.valueOf("2019-05-19"),600000,"F"));
-        list.add(new EmployeePayrollData(0,"Sheetal",Date.valueOf("2019-01-21"),800000,"F"));
+        list.add(new EmployeePayrollData(4,"sandhya", Date.valueOf("2019-05-19"),600000,"F"));
+        list.add(new EmployeePayrollData(5,"Sheetal",Date.valueOf("2019-01-21"),800000,"F"));
         employee_Payroll.UsingArrayListAddMultipleEmployee(list);
         List<EmployeePayrollData> employeePayrollDataList=employee_Payroll.readData();
         Assert.assertEquals(5,employeePayrollDataList.size());
     }
+
+    @Test
+    public void Insert_Multiple_Records_Add_In_DataBase_using_threads() throws SQLException {
+        Employee_payroll employee_Payroll = new Employee_payroll();
+        List<EmployeePayrollData> list=new ArrayList<>();
+        list.add(new EmployeePayrollData(6,"Vinit", Date.valueOf("2018-03-08"),800000,"M"));
+        list.add(new EmployeePayrollData(7,"Manju",Date.valueOf("2017-04-22"),600000,"F"));
+        Instant Start=Instant.now();
+        employee_Payroll.UsingArrayListAddMultipleEmployee(list);
+        Instant end=Instant.now();
+
+        System.out.println("Duration of non thread process is: "+ Duration.between(Start,end));
+        List<EmployeePayrollData> employeePayrollDataList=employee_Payroll.readData();
+        Assert.assertEquals(5,employeePayrollDataList.size());
+    }
+
+
 }
