@@ -3,7 +3,9 @@ package com.bridgelabz;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Employee_Payroll_Test {
@@ -82,5 +84,16 @@ public class Employee_Payroll_Test {
         List<EmployeePayrollData> employeePayrollDataList= employee_Payroll.readData();
         Assert.assertEquals(5,employeePayrollDataList.size());
 
+    }
+
+    @Test
+    public void insert_multiple_values_into_a_table_at_a_single_time() throws SQLException {
+        Employee_payroll employee_Payroll = new Employee_payroll();
+        List<EmployeePayrollData> list=new ArrayList<>();
+        list.add(new EmployeePayrollData(0,"sandhya", Date.valueOf("2019-05-19"),600000,"F"));
+        list.add(new EmployeePayrollData(0,"Sheetal",Date.valueOf("2019-01-21"),800000,"F"));
+        employee_Payroll.UsingArrayListAddMultipleEmployee(list);
+        List<EmployeePayrollData> employeePayrollDataList=employee_Payroll.readData();
+        Assert.assertEquals(5,employeePayrollDataList.size());
     }
 }
