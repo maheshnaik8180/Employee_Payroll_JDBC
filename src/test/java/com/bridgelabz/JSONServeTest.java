@@ -7,6 +7,7 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import java.sql.SQLException;
 
 public class JSONServeTest {
     @Before
@@ -41,13 +42,27 @@ public class JSONServeTest {
     public void NewEmployee_isAdded_return_Response_Code_201(){
         JSONServerEmployeedata[] jsonServerEmpData=getEmplist();
 
-        JSONServerEmployeedata jsonServerEmpData1=new JSONServerEmployeedata(4,"Omkar",60000);
+        JSONServerEmployeedata jsonServerEmpData1=new JSONServerEmployeedata(5,"Jeet",80500);
 
         Response response=Employee_add_To_JsonServer(jsonServerEmpData1);
         int statusCode= response.statusCode();
         Assert.assertEquals(201,statusCode);
 
-        Assert.assertEquals(3,jsonServerEmpData.length);
+        Assert.assertEquals(4,jsonServerEmpData.length);
+    }
+
+    @Test
+    public void update_record_salary_Should_Retun_Response_Code_200() {
+        JSONServerEmployeedata[] serverEmpData=getEmplist();
+
+        RequestSpecification requestSpecification=RestAssured.given();
+        requestSpecification.header("Content-Type","application/json");
+        requestSpecification.body("{\"name\":\"Snehjeet\",\"salary\":\"877500\"}");
+        Response response=requestSpecification.put("/employees/update/5");
+
+        int statusCode=response.getStatusCode();
+        Assert.assertEquals(200,statusCode);
+
     }
 }
 
