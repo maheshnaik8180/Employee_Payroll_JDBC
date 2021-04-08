@@ -42,13 +42,13 @@ public class JSONServeTest {
     public void NewEmployee_isAdded_return_Response_Code_201(){
         JSONServerEmployeedata[] jsonServerEmpData=getEmplist();
 
-        JSONServerEmployeedata jsonServerEmpData1=new JSONServerEmployeedata(5,"Jeet",80500);
+        JSONServerEmployeedata jsonServerEmpData1=new JSONServerEmployeedata(6,"Nikhil",80000);
 
         Response response=Employee_add_To_JsonServer(jsonServerEmpData1);
         int statusCode= response.statusCode();
         Assert.assertEquals(201,statusCode);
 
-        Assert.assertEquals(4,jsonServerEmpData.length);
+        Assert.assertEquals(5,jsonServerEmpData.length);
     }
 
     @Test
@@ -62,6 +62,19 @@ public class JSONServeTest {
 
         int statusCode=response.getStatusCode();
         Assert.assertEquals(200,statusCode);
+
+    }
+
+    @Test
+    public void Delete_record_Using_JSON_Should_Retun_Response_Code_200() {
+        JSONServerEmployeedata[] serverEmpData=getEmplist();
+        String empJson=new Gson().toJson(serverEmpData);
+
+        RequestSpecification requestSpecification=RestAssured.given();
+        requestSpecification.header("Content-Type","application/json");
+        requestSpecification.body(empJson);
+        Response response=requestSpecification.delete("/employees/delete/6");
+
 
     }
 }
